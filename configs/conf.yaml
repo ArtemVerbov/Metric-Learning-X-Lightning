@@ -21,7 +21,7 @@ experiment_config:
     img_size:
     - 256
     - 256
-    batch_size: 512
+    batch_size: 256
     data_split:
     - 0.8
     - 0.1

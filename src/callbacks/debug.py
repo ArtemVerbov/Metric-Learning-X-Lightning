@@ -22,16 +22,17 @@ class VisualizeTriplets(Callback):
         batch_idx: int,
     ) -> None:
 
-        random_index = random.randint(0, len(outputs['triplets'][0]))
-        anchor_index = outputs['triplets'][0][random_index].item()
-        positive_index = outputs['triplets'][1][random_index].item()
-        negative_index = outputs['triplets'][2][random_index].item()
+        if len(self.list_of_triplets) < 30:
+            random_index = random.randint(0, len(outputs['triplets'][0]) - 1)
+            anchor_index = outputs['triplets'][0][random_index].item()
+            positive_index = outputs['triplets'][1][random_index].item()
+            negative_index = outputs['triplets'][2][random_index].item()
 
-        anchors = batch[0][anchor_index]
-        positive = batch[0][positive_index]
-        negative = batch[0][negative_index]
+            anchors = batch[0][anchor_index]
+            positive = batch[0][positive_index]
+            negative = batch[0][negative_index]
 
-        self.list_of_triplets.extend([anchors, positive, negative])
+            self.list_of_triplets.extend([anchors, positive, negative])
 
     def on_train_epoch_end(
             self,
