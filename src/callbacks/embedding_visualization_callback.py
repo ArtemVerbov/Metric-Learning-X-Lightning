@@ -46,10 +46,10 @@ class EmbeddingLogging(Callback):
             init='pca',
             perplexity=len(self.labels),
             metric='cosine',
-        ).fit_transform(np.array(predicts))
+        ).fit_transform(np.array(predicts.cpu()))
 
         df = pd.DataFrame(tsne, columns=['x', 'y'])
-        df[labels] = targets
+        df[labels] = targets.cpu()
         df[labels] = df[labels].map(self.labels)
         scatter = sns.scatterplot(data=df, x='x', y='y', hue=labels, palette='deep')
         scatter.legend(bbox_to_anchor=(1.04, 1.0), fancybox=True)
