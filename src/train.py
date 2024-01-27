@@ -63,8 +63,8 @@ def train(cfg: 'DictConfig'):  # noqa: WPS210
     lr_logger = LearningRateMonitor(logging_interval='epoch')
     visualize = VisualizeTriplets(every_n_epochs=3)
     embedding_logger = EmbeddingLogging(datamodule.class_to_idx)
-    early_stopping = EarlyStopping(monitor='precision_at_1_val', mode='max', patience=5)
-    check_points = ModelCheckpoint(monitor='precision_at_1_val', mode='max', verbose=True)
+    early_stopping = EarlyStopping(monitor='mean_valid_loss', mode='min', patience=3)
+    check_points = ModelCheckpoint(monitor='mean_valid_loss', mode='min', verbose=True)
 
     trainer = Trainer(
         **asdict(experiment_config.trainer_config),
