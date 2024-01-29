@@ -35,21 +35,21 @@ class EmbeddingLogging(Callback):
         self._create_scatter(predicts, targets)
 
         trainer.logger.experiment.add_figure(
-            'Projection of high denominational embedding space to two detentions',
+            'Projection of high dimension embedding space to two dimensions',
             figure=plt.gcf(),
             global_step=trainer.current_epoch,
         )
 
-    def _create_scatter(self, predicts: Tensor, targets: Tensor):
+    def _create_scatter(self, predicts: Tensor, targets: Tensor) -> None:
         labels = 'labels'
         tsne = TSNE(
             init='pca',
             perplexity=len(self.labels),
             metric='cosine',
-        ).fit_transform(np.array(predicts))
+        ).fit_transform(np.array(predicts.cpu()))
 
         df = pd.DataFrame(tsne, columns=['x', 'y'])
-        df[labels] = targets
+        df[labels] = targets.cpu()
         df[labels] = df[labels].map(self.labels)
         scatter = sns.scatterplot(data=df, x='x', y='y', hue=labels, palette='deep')
         scatter.legend(bbox_to_anchor=(1.04, 1.0), fancybox=True)
