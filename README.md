@@ -23,4 +23,4 @@ https://app.clear.ml/projects/34447ffe1ce24bd4a9701d8ca7e12cfc/experiments/98b62
 
 ## Test data projection of high dimension embedding space to two dimensions
 
-![alt text](https://github.com/ArtemVerbov/Image-Segmentation-X-Lightning/blob/main/media/masksData.png?raw=true)
+![alt text](https://github.com/ArtemVerbov/Metric-Learning-X-Lightning/blob/main/media/Triplet_Loss_Embeddings.jpeg?raw=true)
