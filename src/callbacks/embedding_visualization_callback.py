@@ -35,12 +35,12 @@ class EmbeddingLogging(Callback):
         self._create_scatter(predicts, targets)
 
         trainer.logger.experiment.add_figure(
-            'Projection of high denominational embedding space to two detentions',
+            'Projection of high dimension embedding space to two dimensions',
             figure=plt.gcf(),
             global_step=trainer.current_epoch,
         )
 
-    def _create_scatter(self, predicts: Tensor, targets: Tensor):
+    def _create_scatter(self, predicts: Tensor, targets: Tensor) -> None:
         labels = 'labels'
         tsne = TSNE(
             init='pca',

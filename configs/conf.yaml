@@ -45,5 +45,5 @@ experiment_config:
   project_config:
     _target_: src.config.ProjectConfig
     project_name: metric_learning
-    experiment_name: metric_learning_256_new_lr
+    experiment_name: metric_learning
     track_in_clearml: true

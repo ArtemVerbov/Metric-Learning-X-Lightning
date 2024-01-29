@@ -14,13 +14,13 @@ To run training: poetry run python3.11 -m src.train
 2. Migrate dataset to ClearML: make migrate_dataset
 
 ## Dataset information
-Stanford Online Products
+Dataset used: Stanford Online Products
 
-https://paperswithcode.com/dataset/stanford-online-products
+More info: https://paperswithcode.com/dataset/stanford-online-products
 
 ## All training and test metrics traced with clearml:
-to be added
+https://app.clear.ml/projects/34447ffe1ce24bd4a9701d8ca7e12cfc/experiments/98b62b3cbb4a4fa39eebbc85ea39adf0/output/execution
 
-## Test data segmentation mask example
+## Test data projection of high dimension embedding space to two dimensions
 
 ![alt text](https://github.com/ArtemVerbov/Image-Segmentation-X-Lightning/blob/main/media/masksData.png?raw=true)

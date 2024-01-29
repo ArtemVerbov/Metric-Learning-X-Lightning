@@ -75,7 +75,7 @@ def train(cfg: 'DictConfig'):  # noqa: WPS210
             early_stopping,
             check_points,
         ],
-        overfit_batches=10,
+        # overfit_batches=10,
     )
     trainer.fit(model=model, datamodule=datamodule)
     trainer.test(
@@ -87,4 +87,3 @@ def train(cfg: 'DictConfig'):  # noqa: WPS210
 
 if __name__ == '__main__':
     train()
-    from pytorch_metric_learning.losses import ArcFaceLoss, TripletMarginLoss
