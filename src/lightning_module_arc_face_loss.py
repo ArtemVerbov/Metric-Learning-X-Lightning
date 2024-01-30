@@ -114,7 +114,7 @@ class MetricLearningModule(LightningModule):  # noqa: WPS214
         self._NMI_test(metrics['NMI'])
         self._precision_at_one_test(metrics['precision_at_1'])
 
-        return {'embeddings': embeddings, 'labels': labels}
+        return embeddings
 
     def on_train_epoch_end(self) -> None:
         self.log('mean_train_loss', self._train_loss, on_step=False, prog_bar=True, on_epoch=True)
