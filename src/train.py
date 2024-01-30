@@ -11,19 +11,15 @@ from lightning.pytorch.callbacks import (
     ModelCheckpoint,
 )
 
-from src.callbacks.debug import VisualizeTriplets
 from src.callbacks.embedding_visualization_callback import EmbeddingLogging
 from src.config import ExperimentConfig
 from src.constants import CONFIG_PATH
 from src.datamodule import DataModule
-from src.lightning_module import MetricLearningModule
 
 if TYPE_CHECKING:
     from omegaconf import DictConfig
-    from pytorch_metric_learning.losses import BaseMetricLossFunction
-    from pytorch_metric_learning.miners import BaseMiner
-    from torch.optim import Optimizer
-    from torch.optim.lr_scheduler import LRScheduler
+    from lightning import Callback
+    from lightning import LightningModule
 
 
 # noinspection PyDataclass
@@ -31,10 +27,7 @@ if TYPE_CHECKING:
 def train(cfg: 'DictConfig'):  # noqa: WPS210
 
     experiment_config: ExperimentConfig = hydra.utils.instantiate(cfg.experiment_config)
-    opt: 'Optimizer' = hydra.utils.instantiate(cfg.lightning_module.optimizer)
-    scheduler: 'LRScheduler' = hydra.utils.instantiate(cfg.lightning_module.scheduler)
-    loss: 'BaseMetricLossFunction' = hydra.utils.instantiate(cfg.lightning_module.loss)
-    mining_func: 'BaseMiner' = hydra.utils.instantiate(cfg.lightning_module.mining_function)
+    module: 'LightningModule' = hydra.utils.instantiate(cfg.lightning_module.module)
 
     lightning.seed_everything(0)
     datamodule = DataModule(cfg=experiment_config.data_config)
@@ -52,16 +45,13 @@ def train(cfg: 'DictConfig'):  # noqa: WPS210
         task.connect(asdict(experiment_config))
         task.connect_configuration(datamodule.transforms.get_train_transforms(), name='transformations')
 
-    model = MetricLearningModule(
-        experiment_config.model_config,
-        optimizer=opt,
-        scheduler=scheduler,
-        loss=loss,
-        mining_func=mining_func,
+    model = module(
+        classes=datamodule.class_to_idx,
+        model_cfg=experiment_config.model_config,
     )
 
     lr_logger = LearningRateMonitor(logging_interval='epoch')
-    visualize = VisualizeTriplets(every_n_epochs=3)
+    visualize: 'Callback' = hydra.utils.instantiate(cfg.lightning_module.visualization)
     embedding_logger = EmbeddingLogging(datamodule.class_to_idx)
     early_stopping = EarlyStopping(monitor='mean_valid_loss', mode='min', patience=3)
     check_points = ModelCheckpoint(monitor='mean_valid_loss', mode='min', verbose=True)
