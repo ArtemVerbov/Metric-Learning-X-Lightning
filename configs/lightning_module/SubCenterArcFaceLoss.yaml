@@ -1,0 +1,18 @@
+module:
+  _target_: src.lightning_module_arc_face_loss.MetricLearningModule
+  _partial_: true
+  optimizer:
+    _target_: torch.optim.Adam
+    _partial_: true
+    lr: 1e-4
+  loss:
+    _target_: pytorch_metric_learning.losses.SubCenterArcFaceLoss
+    _partial_: true
+  scheduler:
+    _target_: torch.optim.lr_scheduler.ReduceLROnPlateau
+    _partial_: true
+    patience: 1
+    verbose: true
+visualization:
+  _target_: src.callbacks.batch_visualization.VisualizeBatch
+  every_n_epochs: 1
