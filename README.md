@@ -32,4 +32,4 @@ More info: https://paperswithcode.com/dataset/stanford-online-products
 ![alt text](https://github.com/ArtemVerbov/Metric-Learning-X-Lightning/blob/main/media/Triplet_Loss_Embeddings.jpeg?raw=true)
 
 ### With ArcFaceLoss:
-![alt text](https://github.com/ArtemVerbov/Metric-Learning-X-Lightning/blob/main/media/ArcFacle_Loss_Embeddings.jpeg?raw=true)
+![alt text](https://github.com/ArtemVerbov/Metric-Learning-X-Lightning/blob/arc-face-loss/media/ArcFacle_Loss_Embeddings.jpeg?raw=true)
