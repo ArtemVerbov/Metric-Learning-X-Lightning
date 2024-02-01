@@ -17,9 +17,8 @@ from src.constants import CONFIG_PATH
 from src.datamodule import DataModule
 
 if TYPE_CHECKING:
+    from lightning import Callback, LightningModule
     from omegaconf import DictConfig
-    from lightning import Callback
-    from lightning import LightningModule
 
 
 # noinspection PyDataclass
@@ -65,7 +64,7 @@ def train(cfg: 'DictConfig'):  # noqa: WPS210
             early_stopping,
             check_points,
         ],
-        # overfit_batches=10,
+        overfit_batches=10,
     )
     trainer.fit(model=model, datamodule=datamodule)
     trainer.test(

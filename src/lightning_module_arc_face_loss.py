@@ -1,10 +1,10 @@
-from typing import TYPE_CHECKING, Dict, List, Optional, Tuple
+from typing import TYPE_CHECKING, Dict, List, Optional, Tuple, Union
 
 import timm
 import torch
 from lightning import LightningModule
-from torch.optim.lr_scheduler import ReduceLROnPlateau
 from torch import Tensor
+from torch.optim.lr_scheduler import ReduceLROnPlateau
 from torchmetrics import MeanMetric
 
 from src.config import ModelConfig
@@ -31,7 +31,7 @@ class MetricLearningModule(LightningModule):  # noqa: WPS214
 
         self.loss = loss(
             num_classes=len(classes),
-            embedding_size=self.model_cfg.embedding_size
+            embedding_size=self.model_cfg.embedding_size,
         )
 
         self.optimizer = optimizer
@@ -99,7 +99,7 @@ class MetricLearningModule(LightningModule):  # noqa: WPS214
 
         self.log('val_loss', loss, on_step=False, prog_bar=False, logger=True)
 
-    def test_step(self, batch: List[Tensor], batch_idx: int) -> Dict:
+    def test_step(self, batch: List[Tensor], batch_idx: int) -> Tensor:
         with torch.no_grad():
             images, labels = batch
             embeddings = self.forward(images)
@@ -143,7 +143,7 @@ class MetricLearningModule(LightningModule):  # noqa: WPS214
         )
 
     # noinspection PyCallingNonCallable
-    def configure_optimizers(self):
+    def configure_optimizers(self) -> Union[Tuple[Dict, ...], Tuple]:
         optimizer = self.optimizer(params=self.parameters())
         loss_optimizer = self.optimizer(params=self.loss.parameters())
         if self.scheduler:
@@ -159,11 +159,11 @@ class MetricLearningModule(LightningModule):  # noqa: WPS214
                         'monitor': self.model_cfg.monitor,
                     },
                 },
-                {'optimizer': loss_optimizer}
+                {'optimizer': loss_optimizer},
             )
         return optimizer, loss_optimizer
 
-    def _scheduler_step(self):
+    def _scheduler_step(self) -> None:
         if (self.trainer.current_epoch + 1) % self.model_cfg.optimizer_frequency == 0:
             if isinstance(self.lr_schedulers(), ReduceLROnPlateau):
                 self.lr_schedulers().step(self.trainer.callback_metrics[self.model_cfg.monitor])

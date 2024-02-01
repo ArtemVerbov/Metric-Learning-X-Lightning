@@ -1,6 +1,6 @@
 defaults:
   - _self_
-  - lightning_module: ArcFaceLoss
+  - lightning_module: TripletMarginLoss
 experiment_config:
   _target_: src.config.ExperimentConfig
   model_config:
