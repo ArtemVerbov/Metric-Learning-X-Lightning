@@ -22,6 +22,7 @@ class MetricLearningModule(LightningModule):  # noqa: WPS214
         optimizer: 'Optimizer',
         loss: 'BaseMetricLossFunction',
         mining_func: 'BaseMiner',
+        classes: Optional[Dict[str, int]] = None,
         scheduler: Optional['LRScheduler'] = None,
     ):
         super().__init__()

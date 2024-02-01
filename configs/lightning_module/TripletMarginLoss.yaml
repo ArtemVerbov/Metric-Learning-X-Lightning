@@ -1,0 +1,27 @@
+distance: &distance pytorch_metric_learning.distances.CosineSimilarity
+module:
+  _target_: src.lightning_module_triplet_margin_loss.MetricLearningModule
+  _partial_: true
+  optimizer:
+    _target_: torch.optim.Adam
+    _partial_: true
+    lr: 1e-4
+  loss:
+    _target_: pytorch_metric_learning.losses.TripletMarginLoss
+    margin: 0.2
+    distance:
+      _target_: *distance
+  mining_func:
+    _target_: pytorch_metric_learning.miners.TripletMarginMiner
+    margin: 0.2
+    type_of_triplets: semihard
+    distance:
+      _target_: *distance
+  scheduler:
+    _target_: torch.optim.lr_scheduler.ReduceLROnPlateau
+    _partial_: true
+    patience: 1
+    verbose: true
+visualization:
+  _target_: src.callbacks.triplet_visualization.VisualizeTriplets
+  every_n_epochs: 1
